@@ -1,0 +1,28 @@
+services:
+  # configurer le service web de dev
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: php-exercise
+    networks:
+      - dev-php-network
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./app:/var/www/html
+
+    develop:
+      watch:
+        # répercuter les modifications du code source
+        - action: sync
+          path: ./app
+          target: /var/www/html
+
+        # mettre à jour l'image lors d'un changement dockerfile
+        - action: rebuild
+          path: Dockerfile
+
+# créer le réseau dédié au dev
+networks:
+  dev-php-network:
