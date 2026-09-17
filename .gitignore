@@ -1,0 +1,26 @@
+# Exclure les fichiers système
+.DS_Store
+Thumbs.db
+
+# Masquer les données des éditeurs
+.vscode/
+.idea/
+
+# Exclure les dépendances PHP
+vendor/
+composer.phar
+
+# Exclure les données des conteneurs et logs
+mysql-data/
+zap-data/
+*.log
+
+# Protéger les variables d'environnement
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# Exclure les documents personnels
+note.md
+*.pdf
