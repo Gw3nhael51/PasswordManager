@@ -5,6 +5,7 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: php-exercise
+    image: php-exercise
     networks:
       - dev-php-network
     ports:
