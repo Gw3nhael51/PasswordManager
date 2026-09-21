@@ -5,12 +5,17 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: php-exercise
+    image: php-exercise
     networks:
       - dev-php-network
     ports:
       - "8000:8000"
+    env_file:
+      - .env
     volumes:
       - ./app:/var/www/html
+    depends_on:
+      - database
 
     develop:
       watch:
@@ -22,6 +27,22 @@ services:
         # mettre à jour l'image lors d'un changement dockerfile
         - action: rebuild
           path: Dockerfile
+
+  # service de base de données postgresql
+  database:
+    container_name: php-database
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${DB_NAME}
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "${DB_PORT:-5432}:5432"
+    networks:
+      - dev-php-network
+    volumes:
+      - ./app/database/init.sql:/docker-entrypoint-initdb.d/init.sql
 
 # créer le réseau dédié au dev
 networks:
