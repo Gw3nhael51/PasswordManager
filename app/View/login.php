@@ -1,12 +1,82 @@
 <?php
-    // Configurer : Définir le titre de la page de connexion
-    $title = "Connexion";
-    require_once __DIR__ . '/header.php';
+// inclure la config et l'authentification
+require_once __DIR__ . '/../Model/config.php';
+require_once __DIR__ . '/../Controller/auth.php';
+
+const REDIRECT_DASHBOARD = 'Location: dashboard.php';
+const REDIRECT_LOGIN = 'Location: login.php';
+
+// rediriger si l'utilisateur est déjà connecté
+if (isConnected()) {
+    header(REDIRECT_DASHBOARD);
+    exit;
+}
+
+// initialiser l'erreur
+$error = '';
+
+// récupérer l'erreur stockée en session
+if (!empty($_SESSION['error'])) {
+    $error = $_SESSION['error'];
+    unset($_SESSION['error']); // supprimer après lecture
+}
+
+// traiter le formulaire si soumis
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+
+    // récupérer les champs
+    $username = $_POST['username'] ?? '';
+    $password = $_POST['password'] ?? '';
+
+    // vérifier les champs requis
+    if (empty($username) || empty($password)) {
+        $_SESSION['error'] = "Please fill in all fields.";
+        header(REDIRECT_LOGIN);
+        exit;
+    }
+
+    // rechercher l'utilisateur
+    try {
+        $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ?");
+        $stmt->execute([$username]);
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // vérifier le mot de passe
+        if ($user && password_verify($password, $user['password'])) {
+
+            // connecter l'utilisateur
+            connectingUser($user);
+
+            // rediriger vers dashboard
+            header(REDIRECT_DASHBOARD);
+            exit;
+        } else {
+            // stocker l'erreur en session
+            $_SESSION['error'] = "Incorrect username or password. Please try again.";
+            header(REDIRECT_LOGIN);
+            exit;
+        }
+    } catch (PDOException $e) {
+        $_SESSION['error'] = "Database error: " . $e->getMessage();
+        header(REDIRECT_LOGIN);
+        exit;
+    }
+}
+
+$title = "Connexion";
+require_once __DIR__ . '/header.php';
 ?>
 
-<form class="flex flex-col gap-4 p-9 bg-gray-900 border border-white/10 rounded-2xl w-full max-w-sm shadow-2xl" method="POST" action="/dashboard.php">
+<form class="flex flex-col gap-4 p-9 bg-gray-900 border border-white/10 rounded-2xl w-full max-w-sm shadow-2xl" method="POST" action="/login.php">
     <h1 class="text-center text-white text-2xl font-semibold tracking-tight mb-2">Login</h1>
+
+    <?php if (!empty($error)): ?>
+        <p class="text-sm text-red-400 text-center bg-red-950/50 border border-red-800 rounded-lg p-2">
+            <?= htmlspecialchars($error) ?>
+        </p>
+    <?php endif; ?>
     
+    <!--  -->
     <div class="flex items-center gap-3 rounded-xl px-4 py-3 bg-gray-800 border border-gray-700">
         <label for="username" class="sr-only">Username</label>
         <svg class="h-5 w-5 fill-gray-400 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
@@ -16,6 +86,7 @@
         <input id="username" name="username" autocomplete="off" placeholder="Username" class="bg-transparent border-none outline-none w-full text-gray-100 placeholder-gray-500 text-sm" type="text">
     </div>
     
+    <!--  -->
     <div class="flex items-center gap-3 rounded-xl px-4 py-3 bg-gray-800 border border-gray-700">
         <label for="password" class="sr-only">Password</label>
         <svg class="h-5 w-5 fill-gray-400 shrink-0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16">
