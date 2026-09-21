@@ -18,6 +18,12 @@ switch (true) {
         require_once __DIR__ . '/View/dashboard.php';
         break;
 
+    case $uri === '/logout' || $uri === '/logout.php' || $page === 'logout':
+        require_once __DIR__ . '/Controller/auth.php';
+        logoutUser();
+        header('Location: /login.php');
+        exit;
+
     case $uri === '/' || $uri === '/home' || $uri === '/home.php' || $page === 'home':
         default:
         require_once __DIR__ . '/View/home.php';
