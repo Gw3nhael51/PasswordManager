@@ -12,6 +12,10 @@ CREATE TABLE users (
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- Username    Password (en clair)
--- admin       securepass
--- test_user   123456
+-- insertion des utilisateurs de test
+-- admin / securepass
+-- test_user / 123456
+
+INSERT INTO users (username, password, role) VALUES
+    ('admin', '$2y$12$z.Bp2f86Gt7IKLyhwP0XPe/TuX1yma3gUZA6VB9zoBhJPvW3Uf34S', 'admin'),
+    ('test_user', '$2y$12$.bFMV9RhLE5wEiySFeyXmuXtTbgWCba12dGHVSAuACS.ddbpz8JyG', 'user');
