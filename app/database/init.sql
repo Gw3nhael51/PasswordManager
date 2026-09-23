@@ -1,7 +1,8 @@
 SET client_encoding = 'UTF8';
 
 -- Nettoyage
-DROP TABLE IF EXISTS users;
+DROP TABLE IF EXISTS users CASCADE;
+DROP TABLE IF EXISTS vault_items CASCADE;
 
 -- table des Utilisateurs
 CREATE TABLE users (
@@ -26,10 +27,10 @@ CREATE TABLE vault_items (
     user_id INT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     title VARCHAR(100) NOT NULL,
     website_url VARCHAR(255) NOT NULL,
+    username VARCHAR(100) NOT NULL,
     encrypted_password TEXT NOT NULL,
-    iv VARCHAR(50) DEFAULT 'Général',
-    
-    -- vu par tous le sutilisateurs
-    is_shared BOOLEAN DEFAULT FALSE, 
+    iv VARCHAR(255) NOT NULL,
+    category VARCHAR(50) DEFAULT 'General',
+    is_shared BOOLEAN DEFAULT FALSE,
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
