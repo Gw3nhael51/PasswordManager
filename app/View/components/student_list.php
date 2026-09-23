@@ -18,56 +18,6 @@
                     <img src="https://randomuser.me/api/portraits/women/82.jpg" alt="Annette Watson">
                 </div>
                 <span class="text-gray-600">Annette Watson</span>
-                <span class="ml-auto font-semibold">9.3</span>
-            </li>
-            <li class="flex items-center">
-                <div class="h-10 w-10 mr-3 bg-gray-100 rounded-full overflow-hidden">
-                    <img src="https://randomuser.me/api/portraits/men/81.jpg" alt="Calvin Steward">
-                </div>
-                <span class="text-gray-600">Calvin Steward</span>
-                <span class="ml-auto font-semibold">8.9</span>
-            </li>
-            <li class="flex items-center">
-                <div class="h-10 w-10 mr-3 bg-gray-100 rounded-full overflow-hidden">
-                    <img src="https://randomuser.me/api/portraits/men/80.jpg" alt="Ralph Richards">
-                </div>
-                <span class="text-gray-600">Ralph Richards</span>
-                <span class="ml-auto font-semibold">8.7</span>
-            </li>
-            <li class="flex items-center">
-                <div class="h-10 w-10 mr-3 bg-gray-100 rounded-full overflow-hidden">
-                    <img src="https://randomuser.me/api/portraits/men/79.jpg" alt="Bernard Murphy">
-                </div>
-                <span class="text-gray-600">Bernard Murphy</span>
-                <span class="ml-auto font-semibold">8.2</span>
-            </li>
-            <li class="flex items-center">
-                <div class="h-10 w-10 mr-3 bg-gray-100 rounded-full overflow-hidden">
-                    <img src="https://randomuser.me/api/portraits/women/78.jpg" alt="Arlene Robertson">
-                </div>
-                <span class="text-gray-600">Arlene Robertson</span>
-                <span class="ml-auto font-semibold">8.2</span>
-            </li>
-            <li class="flex items-center">
-                <div class="h-10 w-10 mr-3 bg-gray-100 rounded-full overflow-hidden">
-                    <img src="https://randomuser.me/api/portraits/women/77.jpg" alt="Jane Lane">
-                </div>
-                <span class="text-gray-600">Jane Lane</span>
-                <span class="ml-auto font-semibold">8.1</span>
-            </li>
-            <li class="flex items-center">
-                <div class="h-10 w-10 mr-3 bg-gray-100 rounded-full overflow-hidden">
-                    <img src="https://randomuser.me/api/portraits/men/76.jpg" alt="Pat Mckinney">
-                </div>
-                <span class="text-gray-600">Pat Mckinney</span>
-                <span class="ml-auto font-semibold">7.9</span>
-            </li>
-            <li class="flex items-center">
-                <div class="h-10 w-10 mr-3 bg-gray-100 rounded-full overflow-hidden">
-                    <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Norman Walters">
-                </div>
-                <span class="text-gray-600">Norman Walters</span>
-                <span class="ml-auto font-semibold">7.7</span>
             </li>
         </ul>
     </div>
