@@ -21,7 +21,7 @@ $user = getUser();
     <p class="text-gray-400 text-sm">
         <?= $connected
             ? 'Logged in as <strong class="text-white">' . htmlspecialchars($user['username'] ?? '') . '</strong> (' . htmlspecialchars($user['role'] ?? '') . ').'
-            : 'Self-hosted, encrypted local password vault & security dashboard.' ?>
+            : 'Self-hosted, encrypted local password manager & security dashboard.' ?>
     </p>
 
     <div class="flex flex-col gap-3 mt-3">
