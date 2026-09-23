@@ -1,4 +1,4 @@
-# VaultPanel — Self-Hosted Local Password Vault & Security Dashboard
+# PasswordManager - Self-Hosted Local Password Vault & Security Dashboard
 
 An open-source, local-first password manager and security dashboard built with **PHP 8.2**, **PostgreSQL 16**, **Docker**, and **Vanilla JavaScript** styled with **Tailwind CSS**.
 
