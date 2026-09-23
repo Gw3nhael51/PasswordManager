@@ -1,5 +1,5 @@
 <!-- Afficher : Présenter les recommandations d'audit de sécurité -->
-<div class="bg-white shadow rounded-lg p-6">
+<div class="bg-white shadow rounded-lg p-11">
     <div class="flex items-center justify-between pb-4 border-b border-gray-100">
         <h2 class="text-lg font-semibold text-gray-900 flex items-center">
             <svg class="h-5 w-5 text-green-600 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">

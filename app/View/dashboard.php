@@ -27,21 +27,17 @@
                 require_once __DIR__ . '/components/stats_cards.php';
             ?>
 
-            <section class="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div class="lg:col-span-2 space-y-6">
+            <section class="grid gap-6">
                     <?php
+                        
                         // Inclure : Afficher la liste des identifiants enregistrés
                         require_once __DIR__ . '/components/vault_list.php';
-                    ?>
-                </div>
-
-                <div class="space-y-6">
-                    <?php
-                        // Inclure : Afficher le générateur de mot de passe interactif
-                        require_once __DIR__ . '/components/generator.php';
-
+                
                         // Inclure : Afficher l'audit de sécurité
                         require_once __DIR__ . '/components/security_audit.php';
+
+                        // Inclure : Afficher le générateur de mot de passe interactif
+                        require_once __DIR__ . '/components/generator.php';
                     ?>
                 </div>
             </section>
