@@ -42,7 +42,7 @@
                 <label for="gen-length">Length</label>
                 <span id="gen-length-val" class="font-bold text-purple-600">16</span>
             </div>
-            <input id="gen-length" type="range" min="8" max="40" value="16" class="w-full accent-purple-600 cursor-pointer" />
+            <input id="gen-length" type="range" min="16" max="40" value="16" class="w-full accent-purple-600 cursor-pointer" />
         </div>
 
         <div class="grid grid-cols-2 gap-3 pt-2">
