@@ -1,98 +1,132 @@
-# data-panel-php
+# PasswordManager - Self-Hosted Local Password Vault & Security Dashboard
 
-Application web PHP conteneurisée avec Docker et orchestrée via Docker Compose, structurée selon le patron d'architecture logicielle **MVC-P**.
-
----
-
-## Architecture logicielle (MVC-P)
-
-Le projet est découpé selon le motif d'architecture **MVC** complété par le module métier **Product** :
-
-- **M (Model - Gestion des données et persistance) :**
-  - **Rôle précis :** Il fait l'abstraction de la base de données relationnelle (MySQL via l'extension PDO). Aucun code HTML ou logique de routage ne s'y trouve.
-  - **Contenu concret :** 
-    - `Database.php` : Classe de connexion singleton utilisant PDO pour interagir avec la base.
-    - `User.php` : Modèle gérant les utilisateurs (requêtes SQL préparées `SELECT * FROM users WHERE username = :username`, hachage et vérification des mots de passe via `password_verify()`).
-
-- **V (View - Rendu graphique et templates) :**
-  - **Rôle précis :** Se charge uniquement de l'affichage HTML/CSS pour le navigateur. Reçoit des données préformatées envoyées par les contrôleurs.
-  - **Contenu concret :**
-    - `header.php` / `footer.php` : Structure HTML5 commune (DOCTYPE, meta responsive, inclusion de `global.css`).
-    - `home.php` : Page d'accueil avec le bouton CTA redirigeant vers la connexion.
-    - `login.php` : Interface du formulaire de connexion envoyant les requêtes en `POST`.
-
-- **C (Controller - Logique applicative et orchestration) :**
-  - **Rôle précis :** Intercepte les actions de l'utilisateur (`GET`, `POST`), valide les champs soumis, interroge les modèles pour manipuler les données et décide quelle vue charger ou vers quelle page rediriger.
-  - **Contenu concret :**
-    - `AuthController.php` : Récupère `$_POST['username']` et `$_POST['password']`, sollicite `User.php` pour valider les identifiants, initialise la session `$_SESSION['user']`, et effectue la redirection (`header('Location: ...')`) ou renvoie un message d'erreur à la vue.
-
-- **P (Product - Module métier dédié au catalogue) :**
-  - **Rôle précis :** Ce dossier isole l'intégralité du domaine métier "Produits" du reste de l'application (approche modulaire). Cela évite de mélanger la gestion des utilisateurs/authentification avec la logique commerciale des produits.
-  - **Contenu concret :**
-    - `Product.php` : Entité représentant un produit (identifiant, référence, libellé, prix hors taxe, quantité en stock, calcul de TVA).
-    - `ProductController.php` : Gère le cycle de vie des produits (CRUD : lister les articles du catalogue, afficher une fiche produit, mettre à jour le stock après une commande).
+An open-source, local-first password manager and security dashboard built with **PHP 8.2**, **PostgreSQL 16**, **Docker**, and **Vanilla JavaScript** styled with **Tailwind CSS**.
 
 ---
 
-## Arborescence détaillée du projet
+## 🎯 Purpose & Philosophy
+
+VaultPanel is designed to run entirely offline on a local machine (`localhost`). It requires **no cloud registration**, **no external dependencies**, and stores sensitive credentials in an isolated, encrypted PostgreSQL database running inside a Docker container.
+
+This project serves as a hands-on learning environment to practice:
+- **PHP**: MVC architecture, PDO database abstraction, OpenSSL symmetric encryption (AES-256), session management, and JSON API design.
+- **Docker & Docker Compose**: Multi-container orchestration (PHP CLI server + PostgreSQL), file synchronization with `watch`, and data volume persistence.
+- **SQL (PostgreSQL)**: Relational schema design, role isolation, data aggregation (`COUNT`, `AVG`, `GROUP BY`), and indexes.
+- **JavaScript (ES6+)**: Consuming internal REST APIs via `fetch()`, interactive password generator, clipboard management, and data visualization with Chart.js.
+
+---
+
+## ✨ Features
+
+- **🔐 Personal Encrypted Vault**: Store, update, and manage credentials (title, URL, username, encrypted password, category, notes, favorites).
+- **👥 Role-Based Access Control (RBAC)**:
+  - **`user`**: Private access to personal credentials, view/copy access to shared credentials, personal password health analytics.
+  - **`admin`**: Full access to personal credentials, create/update/delete shared items, user management, and security audit logs.
+- **📊 Security Audit Dashboard**:
+  - Global password health score.
+  - Identification of weak, reused, or outdated passwords.
+  - Category breakdown and credential distribution.
+- **⚡ Interactive Password Generator**:
+  - Configurable length and character sets (uppercase, lowercase, numbers, symbols).
+  - Real-time password strength meter and one-click copy with automatic clipboard clearing.
+- **🛡️ AES-256 Symmetric Encryption**: Passwords encrypted at rest using PHP's native `openssl_encrypt()` before reaching the database.
+
+---
+
+## 🏗️ Architecture
 
 ```text
-├── Dockerfile                  # Construction de l'image Docker PHP 8.2 CLI + extensions PDO MySQL
-├── Makefile                    # Commandes d'automatisation (build, up, watch, down)
-├── README.md                   # Documentation technique et d'architecture
-├── docker-compose.dev.yaml     # Configuration Docker Compose (ports 8000:8000, volume ./app)
+├── Dockerfile                  # PHP 8.2 runtime with PDO PostgreSQL & OpenSSL
+├── docker-compose.dev.yaml     # Orchestrates web service and PostgreSQL container
+├── Makefile                    # Developer shortcuts (build, up, watch, db-init)
+├── README.md                   # Project documentation
 └── app/
-    ├── index.php               # Routeur central (aiguille / et /login.php vers les bonnes vues)
+    ├── index.php               # Front controller & central router
     │
-    ├── Controller/             # Logique applicative générale
-    │   └── AuthController.php  # Traitement du login/logout, gestion de session et redirections
+    ├── Controller/             # Application controllers
+    │   ├── auth.php            # Session & authentication handler
+    │   ├── register.php        # Account creation handler
+    │   └── VaultController.php # Password manager CRUD & API actions
     │
-    ├── Model/                  # Couche de données et accès base
-    │   ├── Database.php        # Initialisation de la connexion PDO MySQL
-    │   └── User.php            # Requêtes préparées pour la gestion des comptes utilisateurs
+    ├── Model/                  # Data access layer
+    │   ├── config.php          # Database PDO connection singleton
+    │   ├── User.php            # User authentication & role management
+    │   └── Vault.php           # Vault items, encryption & SQL queries
     │
-    ├── Product/                # Module métier autonome "Catalogue Produits"
-    │   ├── Product.php         # Entité produit (propriétés, prix, stock, calculs métier)
-    │   └── ProductController.php # Actions de consultation et modification des produits
+    ├── database/
+    │   └── init.sql            # PostgreSQL schema definition & test seed data
     │
-    ├── View/                   # Templates d'affichage HTML (sans DOCTYPE dupliqué)
-    │   ├── header.php          # Squelette haut de page + lien CSS /style/global.css
-    │   ├── footer.php          # Fermeture </body></html>
-    │   ├── home.php            # Écran d'accueil avec bouton d'accès à la connexion
-    │   └── login.php           # Formulaire de connexion (sécurisé en méthode POST)
+    ├── View/                   # Presentation layer (HTML5 / Tailwind CSS)
+    │   ├── header.php          # HTML layout header & Tailwind setup
+    │   ├── footer.php          # HTML layout footer
+    │   ├── home.php            # Landing page
+    │   ├── login.php           # Login form
+    │   ├── dashboard.php       # Main dashboard layout
+    │   └── components/         # Reusable dashboard widgets
+    │       ├── sidebar.php     # Navigation sidebar (with admin links)
+    │       ├── topbar.php      # User session profile & quick actions
+    │       ├── stats_cards.php # Security metrics & counter cards
+    │       ├── generator.php   # Interactive JS password generator
+    │       └── vault_list.php  # Credential table with search & filters
     │
-    └── style/                  # Feuilles de style
-        └── global.css          # Thème sombre moderne, formulaires et boutons responsive
+    └── style/
+        └── global.css          # Custom styling additions
 ```
 
 ---
 
-## Démarrage rapide
+## 🚀 Quick Start
 
-Le projet utilise Docker pour garantir un environnement de développement reproductible.
+### 1. Requirements
+- [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/)
+- [Make](https://www.gnu.org/software/make/) (optional, but recommended)
 
-### 1. Construire l'image
+### 2. Build and Start the Application
 
 ```bash
+# Build Docker images
 make build
-```
 
-### 2. Démarrer l'application
-
-```bash
+# Start containers in detached mode
 make up
 ```
 
-L'application est accessible sur [http://localhost:8000](http://localhost:8000).
+The application is now accessible at [http://localhost:8000](http://localhost:8000).
 
-### 3. Mode développement (synchronisation à chaud)
+### 3. Development Mode (Hot-Reload)
+
+To enable live file synchronization:
 
 ```bash
 make watch
 ```
 
-### 4. Arrêter les conteneurs
+### 4. Database Reset / Seed
+
+To re-apply [app/database/init.sql](file:///home/orion-pc/dev/projets/cours/docker/php_docker/app/database/init.sql):
 
 ```bash
-make down
+make db-init
 ```
+
+---
+
+## 🔑 Default Test Accounts
+
+| Username | Password | Role | Access Level |
+| :--- | :--- | :---: | :--- |
+| `admin` | `securepass` | `admin` | Full management, shared vault, users |
+| `test_user` | `123456` | `user` | Personal vault, shared vault (read-only) |
+
+---
+
+## 🛠️ Useful Commands
+
+| Command | Description |
+| :--- | :--- |
+| `make up` | Start all services in the background |
+| `make down` | Stop all services |
+| `make logs` | Stream container logs |
+| `make sh` | Open a shell in the PHP web container |
+| `make db-shell` | Open an interactive `psql` PostgreSQL console |
+| `make clean` | Stop containers and remove persisted volumes |

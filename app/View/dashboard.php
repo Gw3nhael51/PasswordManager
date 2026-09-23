@@ -1,6 +1,6 @@
 <?php
     // Configurer : Définir le titre et la classe du corps de page
-    $title = "Dashboard";
+    $title = "Password Manager";
     $bodyClass = "flex bg-gray-100 min-h-screen";
     
     require_once __DIR__ . '/../Controller/auth.php';
@@ -23,29 +23,31 @@
                 // Inclure : Afficher l'en-tête du tableau de bord
                 require_once __DIR__ . '/components/dashboard_header.php';
 
-                // Inclure : Afficher les indicateurs statistiques
+                // Inclure : Afficher les indicateurs statistiques du coffre
                 require_once __DIR__ . '/components/stats_cards.php';
             ?>
 
-            <section class="grid md:grid-cols-2 xl:grid-cols-4 xl:grid-rows-3 xl:grid-flow-col gap-6">
-                <?php
-                    // Inclure : Afficher le graphique mensuel des étudiants
-                    require_once __DIR__ . '/components/monthly_chart.php';
+            <section class="grid gap-6">
+                    <?php
+                        
+                        // Inclure : Afficher la liste des identifiants enregistrés
+                        require_once __DIR__ . '/components/vault_list.php';
+                
+                        // Inclure : Afficher l'audit de sécurité
+                        require_once __DIR__ . '/components/security_audit.php';
 
-                    // Inclure : Afficher les statistiques de leçons
-                    require_once __DIR__ . '/components/lection_stats.php';
-
-                    // Inclure : Afficher la liste des étudiants
-                    require_once __DIR__ . '/components/student_list.php';
-
-                    // Inclure : Afficher le graphique par type d'études
-                    require_once __DIR__ . '/components/study_type_chart.php';
-                ?>
+                        // Inclure : Afficher le générateur de mot de passe interactif
+                        require_once __DIR__ . '/components/generator.php';
+                    ?>
+                </div>
             </section>
         </main>
     </div>
 
 <?php
+    // Inclure : Afficher la boîte de dialogue d'ajout d'identifiant
+    require_once __DIR__ . '/components/modal_add_item.php';
+
     // Inclure : Fermer les balises du document HTML
     require_once __DIR__ . '/footer.php';
 ?>
