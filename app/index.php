@@ -1,9 +1,10 @@
 <?php
 
-# decide les redirections
+// Décider : Router les requêtes vers les bonnes vues
 $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 
-if (file_exists(__DIR__ . $uri) && !is_dir(__DIR__ . $uri)) {
+// Ignorer : Laisser le serveur interne servir les fichiers statiques réels
+if ($uri !== '/' && $uri !== '/index.php' && file_exists(__DIR__ . $uri) && !is_dir(__DIR__ . $uri)) {
     return false;
 }
 
@@ -24,9 +25,8 @@ switch (true) {
         header('Location: /login.php');
         exit;
 
-    case $uri === '/' || $uri === '/home' || $uri === '/home.php' || $page === 'home':
-        default:
+    case $uri === '/' || $uri === '/index' || $uri === '/index.php' || $uri === '/home' || $uri === '/home.php' || $page === 'home':
+    default:
         require_once __DIR__ . '/View/home.php';
         break;
-
 }
