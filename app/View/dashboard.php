@@ -1,6 +1,6 @@
 <?php
     // Configurer : Définir le titre et la classe du corps de page
-    $title = "Password Vault";
+    $title = "Password Manager";
     $bodyClass = "flex bg-gray-100 min-h-screen";
     
     require_once __DIR__ . '/../Controller/auth.php';

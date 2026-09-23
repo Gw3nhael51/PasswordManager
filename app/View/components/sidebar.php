@@ -9,12 +9,14 @@
     <div class="flex-grow flex flex-col justify-between text-gray-400 bg-gray-900 w-20">
         <nav class="flex flex-col items-center py-6 space-y-4">
             <!-- Lien vers le coffre principal -->
-            <a href="index.php" class="inline-flex items-center justify-center p-3 text-purple-400 bg-gray-800 rounded-xl hover:text-white transition" title="My Vault">
-                <span class="sr-only">My Vault</span>
-                <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
-                </svg>
-            </a>
+            <?php if (isUser() && isConnected()) : ?>
+                <a href="index.php" class="inline-flex items-center justify-center p-3 text-purple-400 bg-gray-800 rounded-xl hover:text-white transition" title="My Vault">
+                    <span class="sr-only">My Vault</span>
+                    <svg class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z" />
+                    </svg>
+                </a>
+            <?php endif; ?>
 
             <!-- Lien vers les éléments partagés -->
             <a href="#shared" id="filter-shared-nav" class="inline-flex items-center justify-center p-3 hover:text-white hover:bg-gray-800 rounded-xl transition" title="Shared Credentials">

@@ -46,7 +46,7 @@ This project serves as a hands-on learning environment to practice:
     ├── Controller/             # Application controllers
     │   ├── auth.php            # Session & authentication handler
     │   ├── register.php        # Account creation handler
-    │   └── VaultController.php # Password vault CRUD & API actions
+    │   └── VaultController.php # Password manager CRUD & API actions
     │
     ├── Model/                  # Data access layer
     │   ├── config.php          # Database PDO connection singleton

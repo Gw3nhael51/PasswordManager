@@ -1,7 +1,7 @@
 <!-- Afficher : Présenter l'en-tête du tableau de bord avec les actions principales -->
 <div class="flex flex-col space-y-4 sm:space-y-0 sm:flex-row sm:items-center sm:justify-between">
     <div>
-        <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Password Vault</h1>
+        <h1 class="text-3xl font-bold text-gray-900 tracking-tight">Password Manager</h1>
         <p class="text-sm text-gray-500 mt-1">Local encrypted credentials & security audit</p>
     </div>
     <div class="flex items-center space-x-3">
