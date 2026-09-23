@@ -1,4 +1,4 @@
-// créer un mot de passe sécurisé selon les options
+// Créer : Générer un mot de passe sécurisé selon les options
 function genPass(len, upper, lower, nums, special) {
     const lowerChars = "abcdefghijklmnopqrstuvwxyz";
     const upperChars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -29,7 +29,46 @@ function genPass(len, upper, lower, nums, special) {
     return pass;
 }
 
-// actualiser le mot de passe généré dans l'interface
+// Évaluer : Calculer la force du mot de passe et ajuster l'interface
+function updateStrength(len, upper, lower, nums, special) {
+    const bar = document.getElementById("gen-strength-bar");
+    const badge = document.getElementById("gen-strength-badge");
+
+    let count = 0;
+    if (upper) count++;
+    if (lower) count++;
+    if (nums) count++;
+    if (special) count++;
+
+    let strength = "Strong";
+    let width = "100%";
+    let barColor = "bg-emerald-500";
+    let badgeClasses = "bg-green-100 text-green-800";
+
+    if (len < 10 || count <= 1) {
+        strength = "Weak";
+        width = "30%";
+        barColor = "bg-rose-500";
+        badgeClasses = "bg-rose-100 text-rose-800";
+    } else if (len < 14 || count <= 2) {
+        strength = "Medium";
+        width = "65%";
+        barColor = "bg-amber-500";
+        badgeClasses = "bg-amber-100 text-amber-800";
+    }
+
+    if (bar) {
+        bar.className = `${barColor} h-full rounded-full transition-all duration-300`;
+        bar.style.width = width;
+    }
+
+    if (badge) {
+        badge.className = `px-2.5 py-0.5 rounded-full text-xs font-medium ${badgeClasses}`;
+        badge.textContent = strength;
+    }
+}
+
+// Actualiser : Mettre à jour le mot de passe généré dans l'interface
 function generate() {
     const lenInput = document.getElementById("gen-length");
     const lenVal = document.getElementById("gen-length-val");
@@ -60,9 +99,11 @@ function generate() {
             output.textContent = pass;
         }
     }
+
+    updateStrength(len, upper, lower, nums, special);
 }
 
-// Réinitialiser les paramètres par défaut du générateur
+// Restaurer : Réinitialiser les paramètres par défaut du générateur
 function reset() {
     const lenInput = document.getElementById("gen-length");
     if (lenInput) {
@@ -97,7 +138,7 @@ function reset() {
     generate();
 }
 
-// Initialiser les écouteurs d'événements du générateur
+// Initialiser : Attacher les écouteurs d'événements du générateur
 function initGenerator() {
     document.getElementById("gen-length")?.addEventListener("input", generate);
     document.getElementById("gen-refresh-btn")?.addEventListener("click", generate);
@@ -106,6 +147,13 @@ function initGenerator() {
         const output = document.getElementById("gen-output");
         if (output?.value) {
             navigator.clipboard.writeText(output.value);
+            const copyText = document.getElementById("gen-copy-text");
+            if (copyText) {
+                copyText.textContent = "Copied!";
+                setTimeout(() => {
+                    copyText.textContent = "Copy";
+                }, 1500);
+            }
         }
     });
 
@@ -117,7 +165,7 @@ function initGenerator() {
     generate();
 }
 
-// Démarrer l'initialisation dès que le document est prêt
+// Démarrer : Lancer l'initialisation dès que le document est prêt
 if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", initGenerator);
 } else {
